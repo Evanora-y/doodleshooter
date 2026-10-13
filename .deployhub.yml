@@ -1,0 +1,30 @@
+version: 2
+
+project:
+  name: doodleshooter
+  description: Doodle District static game served by Nginx
+  auto_deploy: true
+
+build:
+  dockerfile: Dockerfile
+  context: .
+  timeout_minutes: 30
+
+container:
+  restart: unless-stopped
+  init: true
+  stop_grace_seconds: 30
+
+targets:
+  - key: production
+    name: Production
+    auto_deploy: true
+    ports:
+      - container: 80
+        protocol: tcp
+    volumes: []
+    healthcheck:
+      type: http
+      port: 80
+      path: /
+      timeout_seconds: 60
